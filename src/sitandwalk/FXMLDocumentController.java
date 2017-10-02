@@ -70,7 +70,7 @@ public class FXMLDocumentController implements Initializable, ActionListener {
         this.notificationText = "%d minute%s up. Time to take a walk!";
         this.iAmWalking = "I am going for a walk";
         this.iAmSitting = "I just sat down";
-        this.updateTime = "Update Time";
+        this.updateTime = "Update Interval";
     }
     
     /**
@@ -85,6 +85,7 @@ public class FXMLDocumentController implements Initializable, ActionListener {
         prefix = isWalking ? walkingPrefix : sittingPrefix;
         hasNotified = isWalking;
         toggleSitWalkButton.setText(isWalking ? iAmSitting : iAmWalking);
+        this.updateTimerDisplay();
     }
     
     /**
@@ -122,6 +123,7 @@ public class FXMLDocumentController implements Initializable, ActionListener {
         timer = new Timer(1000, this);
         timer.start();
         hasNotified = false;
+        label.setText(String.format("%s%d:%d", prefix, 0, 0));
         this.updateNoteLabelText();
         this.toggleSitWalkButton.setText(iAmWalking);
         this.updateIntervalButton.setText(updateTime);
@@ -141,6 +143,10 @@ public class FXMLDocumentController implements Initializable, ActionListener {
      */
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
+        this.updateTimerDisplay();
+    }
+    
+    private void updateTimerDisplay() {
         Date now = new Date();
         long runningTime = Math.abs(now.getTime() - startTime.getTime());
         long minutes = runningTime / 60000;
